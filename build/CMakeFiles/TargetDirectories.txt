@@ -1,0 +1,3 @@
+/data/data/com.termux/files/home/MiniOFP/build/CMakeFiles/MiniOFP.dir
+/data/data/com.termux/files/home/MiniOFP/build/CMakeFiles/edit_cache.dir
+/data/data/com.termux/files/home/MiniOFP/build/CMakeFiles/rebuild_cache.dir

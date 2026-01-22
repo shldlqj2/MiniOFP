@@ -16,8 +16,7 @@
 
 - 1kt (Knot) = 1시간에 1 NM을 가는 속도
 
-
-2. 대권 거리
+1. 대권 거리
 
 - 지구는 평면이 아니기 때문에 피타고라스 정리를 사용하면 오차가 크게 발생한다.
 
@@ -27,24 +26,23 @@
 
 $$
 a = sin^2left(\frac{Deltaphi}{2}
-ight) + cos phi_1 cdot cos phi_2 cdot sin^2left(\frac{Deltalambda}{2}
+ight) + cos phi_1 \cdot cos phi_2 \cdot sin^2left(\frac{Deltalambda}{2}
 ight)
 $$
 
 $$
-c = 2 cdot \text{atan2}left(sqrt{a}, sqrt{1-a}
+c = 2 \cdot \text{atan2}left(sqrt{a}, sqrt{1-a}
 ight)
 $$
 
 $$
-d = R cdot c
+d = R \cdot c
 $$
 
 여기서:
+
 - $phi$: 위도 (Latitude, 라디안 단위)
 - $lambda$: 경도 (Longitude, 라디안 단위)
 - $R$: 지구 반지름 (약 6,371 km)
 
 ----------
-
-
