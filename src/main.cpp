@@ -1,16 +1,28 @@
+
+#include "NavDB.h"
 #include "geometry.h"
 #include <iostream>
 
 int main() {
-  OFP::Coordinate icn = {37.4602, 126.4407};
-  OFP::Coordinate lax = {33.9416, -118.4085};
+  OFP::NavDB db("../data/airports.csv");
 
-  double dist = OFP::calculateDistance(icn, lax);
+  std::string depCode = "RKSI";
+  std::string arrCode = "EGLL"; // 런던 히드로 공항
 
-  std::cout << "=== MiniOFP Distance Test ===" << std::endl;
-  std::cout << "From: ICN (" << icn.lat << ", " << icn.lon << ")" << std::endl;
-  std::cout << "To: LAX (" << lax.lat << ", " << lax.lon << ")" << std::endl;
-  std::cout << "Distance: " << dist << "NM" << std::endl;
+  const OFP::Airport *dep = db.findAirport(depCode);
+  const OFP::Airport *arr = db.findAirport(arrCode);
+
+  if (dep == nullptr || arr == nullptr) {
+    std::cerr << "Error: Airport not found in DB." << std::endl;
+    return 1;
+  }
+
+  double dist = OFP::calculateDistance(dep->loc, arr->loc);
+
+  std::cout << "=== Mini-OFP Route Engine ===" << std::endl;
+  std::cout << "Dep: " << dep->name << " (" << dep->icao << ")" << std::endl;
+  std::cout << "Arr: " << arr->name << " (" << arr->icao << ")" << std::endl;
+  std::cout << "Flight Distance: " << dist << " NM" << std::endl;
 
   return 0;
 }
