@@ -25,14 +25,11 @@
 - 공식은 다음과 같다.
 
 $$
-a = sin^2left(\frac{Deltaphi}{2}
-ight) + cos phi_1 \cdot cos phi_2 \cdot sin^2left(\frac{Deltalambda}{2}
-ight)
+a = sin^2(\frac{\Delta\phi}{2}) + cos(\phi_1) \cdot cos (\phi_2) \cdot sin^2(\frac{\Delta\lambda}{2})
 $$
 
 $$
-c = 2 \cdot \text{atan2}left(sqrt{a}, sqrt{1-a}
-ight)
+c = 2 \cdot \text{atan2}(\sqrt{a}, \sqrt{1-a})
 $$
 
 $$
@@ -41,8 +38,8 @@ $$
 
 여기서:
 
-- $phi$: 위도 (Latitude, 라디안 단위)
-- $lambda$: 경도 (Longitude, 라디안 단위)
+- $\phi$: 위도 (Latitude, 라디안 단위)
+- $\lambda$: 경도 (Longitude, 라디안 단위)
 - $R$: 지구 반지름 (약 6,371 km)
 
 ----------
