@@ -3,8 +3,8 @@
 
 CMakeFiles/MiniOFP.dir/src/main.cpp.o
  /data/data/com.termux/files/home/MiniOFP/src/main.cpp
- /data/data/com.termux/files/home/MiniOFP/include/Aircraft.h
  /data/data/com.termux/files/home/MiniOFP/include/NavDB.h
+ /data/data/com.termux/files/home/MiniOFP/include/RouteFinder.h
  /data/data/com.termux/files/home/MiniOFP/include/geometry.h
  /data/data/com.termux/files/usr/include/aarch64-linux-android/asm/bitsperlong.h
  /data/data/com.termux/files/usr/include/aarch64-linux-android/asm/errno.h
@@ -438,6 +438,7 @@ CMakeFiles/MiniOFP.dir/src/main.cpp.o
  /data/data/com.termux/files/usr/include/c++/v1/__thread/poll_with_backoff.h
  /data/data/com.termux/files/usr/include/c++/v1/__thread/support.h
  /data/data/com.termux/files/usr/include/c++/v1/__thread/support/pthread.h
+ /data/data/com.termux/files/usr/include/c++/v1/__tree
  /data/data/com.termux/files/usr/include/c++/v1/__tuple/find_index.h
  /data/data/com.termux/files/usr/include/c++/v1/__tuple/ignore.h
  /data/data/com.termux/files/usr/include/c++/v1/__tuple/make_tuple_types.h
@@ -634,6 +635,7 @@ CMakeFiles/MiniOFP.dir/src/main.cpp.o
  /data/data/com.termux/files/usr/include/c++/v1/iterator
  /data/data/com.termux/files/usr/include/c++/v1/limits
  /data/data/com.termux/files/usr/include/c++/v1/locale
+ /data/data/com.termux/files/usr/include/c++/v1/map
  /data/data/com.termux/files/usr/include/c++/v1/math.h
  /data/data/com.termux/files/usr/include/c++/v1/memory
  /data/data/com.termux/files/usr/include/c++/v1/mutex
@@ -722,4 +724,15 @@ CMakeFiles/MiniOFP.dir/src/main.cpp.o
  /data/data/com.termux/files/usr/lib/clang/21/include/stdarg.h
  /data/data/com.termux/files/usr/lib/clang/21/include/stddef.h
  /data/data/com.termux/files/usr/lib/clang/21/include/stdint.h
+
+MiniOFP
+ /data/data/com.termux/files/usr/lib/clang/21/lib/linux/libclang_rt.builtins-aarch64-android.a
+ /data/data/com.termux/files/usr/lib/crtbegin_dynamic.o
+ /data/data/com.termux/files/usr/lib/crtend_android.o
+ /data/data/com.termux/files/usr/lib/libc++_shared.so
+ /data/data/com.termux/files/usr/lib/libunwind.a
+ /system/lib64/libc.so
+ /system/lib64/libdl.so
+ /system/lib64/libm.so
+ /data/data/com.termux/files/home/MiniOFP/build/CMakeFiles/MiniOFP.dir/src/main.cpp.o
 
