@@ -1,63 +1,57 @@
-#include "Aircraft.h"
 #include "NavDB.h"
-#include "geometry.h"
-#include <iomanip> // 소수점 예쁘게 찍기 위해
+#include "RouteFinder.h"
+#include <iomanip>
 #include <iostream>
 
 int main() {
   using namespace OFP;
 
-  // 1. DB 로딩 & 공항 찾기
-  NavDB db("../data/airports.csv");
-  const Airport *dep = db.findAirport("RKSI"); // 인천
-  const Airport *arr = db.findAirport("EGLL"); // 런던
+  // 1. DB 로딩
+  NavDB db("../data/airports.csv", "../data/waypoints.csv",
+           "../data/airways.csv");
 
-  if (!dep || !arr) {
-    std::cerr << "Airport not found!" << std::endl;
-    return 1;
-  }
+  // 2. 경로 탐색 엔진 생성
+  RouteFinder router(db);
 
-  double dist = calculateDistance(dep->loc, arr->loc);
+  // 출발: 서울(RKSI), 도착: BIGOB (아까 CSV에서 정의한 끝점)
+  std::string start = "RKSI";
+  std::string end = "BIGOB";
 
-  std::cout << "=== Flight Feasibility Check ===" << std::endl;
-  std::cout << "Route: " << dep->name << " -> " << arr->name << std::endl;
-  std::cout << "Distance: " << std::fixed << std::setprecision(1) << dist
-            << " NM" << std::endl;
-  std::cout << "--------------------------------" << std::endl;
+  std::cout << "=== Mini-OFP Dijkstra Search ===" << std::endl;
+  std::cout << "Searching path from " << start << " to " << end << "..."
+            << std::endl;
 
-  // 2. 비행기 객체 생성 (대략적인 실제 스펙)
+  // 3. 길 찾기 수행
+  std::vector<std::string> path = router.findPath(start, end);
 
-  // 비행기 A: Boeing 737-800 (작은 비행기)
-  // MaxFuel: 20,800kg, MTOW: 79,000kg, OEW: 41,000kg, Speed: 450kts, FF:
-  // 2,400kg/h
-  Aircraft b737("B737-800", 20800, 79000, 41000, 450, 2400);
-
-  // 비행기 B: Boeing 777-300ER (큰 비행기)
-  // MaxFuel: 145,500kg, MTOW: 351,500kg, OEW: 167,800kg, Speed: 490kts, FF:
-  // 7,500kg/h
-  Aircraft b777("B777-300ER", 145500, 351500, 167800, 490, 7500);
-
-  // 가정: 승객 150명 + 짐 = 약 15,000kg Payload
-  double currentPayload = 15000.0;
-
-  // 3. 검증
-  std::cout << "[Test 1] " << b737.modelName << " with " << currentPayload
-            << "kg payload:" << std::endl;
-  if (b737.canFly(dist, currentPayload)) {
-    std::cout << " -> SUCCESS! Ready for takeoff." << std::endl;
+  if (path.empty()) {
+    std::cout << "Path NOT found!" << std::endl;
   } else {
-    std::cout << " -> FAILED." << std::endl;
-  }
+    std::cout << "Path Found! (" << path.size() << " points)" << std::endl;
+    std::cout << "------------------------------" << std::endl;
 
-  std::cout << "\n[Test 2] " << b777.modelName << " with " << currentPayload
-            << "kg payload:" << std::endl;
-  if (b777.canFly(dist, currentPayload)) {
-    auto result = b777.calculateTrip(dist); // {연료, 시간}
-    std::cout << " -> SUCCESS! Flight Time: " << result.second << " hrs"
-              << std::endl;
-    std::cout << " -> Trip Fuel: " << result.first << " kg" << std::endl;
-  } else {
-    std::cout << " -> FAILED." << std::endl;
+    double totalDist = 0.0;
+    Coordinate prev = db.getCoordinate(path[0]);
+
+    for (size_t i = 0; i < path.size(); ++i) {
+      std::string id = path[i];
+      Coordinate curr = db.getCoordinate(id);
+
+      double legDist = 0;
+      if (i > 0) {
+        legDist = calculateDistance(prev, curr);
+        totalDist += legDist;
+      }
+
+      std::cout << " [" << i << "] " << id;
+      if (i > 0)
+        std::cout << " (+" << (int)legDist << " NM)";
+      std::cout << std::endl;
+
+      prev = curr;
+    }
+    std::cout << "------------------------------" << std::endl;
+    std::cout << "Total Distance: " << totalDist << " NM" << std::endl;
   }
 
   return 0;
