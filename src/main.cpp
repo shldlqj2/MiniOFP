@@ -1,63 +1,51 @@
 #include "Aircraft.h"
 #include "NavDB.h"
 #include "geometry.h"
-#include <iomanip> // 소수점 예쁘게 찍기 위해
+#include <iomanip>
 #include <iostream>
 
 int main() {
   using namespace OFP;
 
-  // 1. DB 로딩 & 공항 찾기
   NavDB db("../data/airports.csv");
-  const Airport *dep = db.findAirport("RKSI"); // 인천
-  const Airport *arr = db.findAirport("EGLL"); // 런던
+  const Airport *dep = db.findAirport("RKSI");
+  const Airport *arr = db.findAirport("EGLL");
 
-  if (!dep || !arr) {
-    std::cerr << "Airport not found!" << std::endl;
+  if (!dep || !arr)
     return 1;
-  }
 
   double dist = calculateDistance(dep->loc, arr->loc);
 
-  std::cout << "=== Flight Feasibility Check ===" << std::endl;
-  std::cout << "Route: " << dep->name << " -> " << arr->name << std::endl;
-  std::cout << "Distance: " << std::fixed << std::setprecision(1) << dist
+  // B777-300ER 생성 (기본 스펙)
+  Aircraft b777("B777-300ER", 145500, 351500, 167800);
+
+  // 상세 성능 설정 (속도 kts, 연료소모 kg/hr)
+  // Climb: 평균 380kts, 연료 10,500 kg/hr (엔진 풀가동)
+  // Cruise: 평균 490kts, 연료 7,500 kg/hr
+  // Descent: 평균 320kts, 연료 2,500 kg/hr (거의 공회전)
+  b777.setPerformance({380, 10500}, {490, 7500}, {320, 2500});
+
+  std::cout << "=== Mini-OFP Detailed Profile ===" << std::endl;
+  std::cout << "Route: " << dep->icao << " -> " << arr->icao << std::endl;
+  std::cout << "Total Distance: " << std::fixed << std::setprecision(1) << dist
             << " NM" << std::endl;
-  std::cout << "--------------------------------" << std::endl;
+  std::cout << "---------------------------------" << std::endl;
 
-  // 2. 비행기 객체 생성 (대략적인 실제 스펙)
+  auto res = b777.calculateProfile(dist);
 
-  // 비행기 A: Boeing 737-800 (작은 비행기)
-  // MaxFuel: 20,800kg, MTOW: 79,000kg, OEW: 41,000kg, Speed: 450kts, FF:
-  // 2,400kg/h
-  Aircraft b737("B737-800", 20800, 79000, 41000, 450, 2400);
-
-  // 비행기 B: Boeing 777-300ER (큰 비행기)
-  // MaxFuel: 145,500kg, MTOW: 351,500kg, OEW: 167,800kg, Speed: 490kts, FF:
-  // 7,500kg/h
-  Aircraft b777("B777-300ER", 145500, 351500, 167800, 490, 7500);
-
-  // 가정: 승객 150명 + 짐 = 약 15,000kg Payload
-  double currentPayload = 15000.0;
-
-  // 3. 검증
-  std::cout << "[Test 1] " << b737.modelName << " with " << currentPayload
-            << "kg payload:" << std::endl;
-  if (b737.canFly(dist, currentPayload)) {
-    std::cout << " -> SUCCESS! Ready for takeoff." << std::endl;
-  } else {
-    std::cout << " -> FAILED." << std::endl;
-  }
-
-  std::cout << "\n[Test 2] " << b777.modelName << " with " << currentPayload
-            << "kg payload:" << std::endl;
-  if (b777.canFly(dist, currentPayload)) {
-    auto result = b777.calculateTrip(dist); // {연료, 시간}
-    std::cout << " -> SUCCESS! Flight Time: " << result.second << " hrs"
+  if (res.isPossible) {
+    std::cout << " [Phase 1: Climb  ] Dist: " << std::setw(6) << res.climbDist
+              << " NM (20 min)" << std::endl;
+    std::cout << " [Phase 2: Cruise ] Dist: " << std::setw(6) << res.cruiseDist
+              << " NM" << std::endl;
+    std::cout << " [Phase 3: Descent] Dist: " << std::setw(6) << res.descentDist
+              << " NM (30 min)" << std::endl;
+    std::cout << "---------------------------------" << std::endl;
+    std::cout << " Total Flight Time : " << res.totalTime << " hours"
               << std::endl;
-    std::cout << " -> Trip Fuel: " << result.first << " kg" << std::endl;
+    std::cout << " Total Block Fuel  : " << res.totalFuel << " kg" << std::endl;
   } else {
-    std::cout << " -> FAILED." << std::endl;
+    std::cout << "Calculation Failed: " << res.message << std::endl;
   }
 
   return 0;
