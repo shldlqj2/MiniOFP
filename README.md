@@ -118,6 +118,8 @@ A*는 다익스트라의 변형이며 내가 이해한 바는 다음과 같다.
 
 생성된 격자 지도에서 출발지점과 목표 지점을 지정한다. 각 사각형은 빈 공간으로, '이동가능'과 '이동 불가능'한 2상태 중 하나를 갖는다.
 
-자세한 설명은 pdf파일로 업로드 해놓았다.
+자세한 설명은 reference에 pdf파일로 업로드 해놓았다.
+
+[pdf 바로가기](/reference/A-Star_정리.pdf)
 
 [A* 알고리즘(A star algorithm) grid map 개념 및 구현](https://recall.tistory.com/m/40)
