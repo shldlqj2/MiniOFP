@@ -1,1 +1,1 @@
-/data/data/com.termux/files/usr/bin/c++ -O2 -g -DNDEBUG -Xlinker --dependency-file=CMakeFiles/MiniOFP.dir/link.d CMakeFiles/MiniOFP.dir/src/main.cpp.o -o MiniOFP
+/usr/bin/c++ CMakeFiles/MiniOFP.dir/src/main.cpp.o -o MiniOFP 
