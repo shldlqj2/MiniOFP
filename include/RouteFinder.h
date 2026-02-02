@@ -1,7 +1,6 @@
 #ifndef ROUTEFINDER_H
 #define ROUTEFINDER_H
 
-#include "NavDB.h"
 #include <algorithm>
 #include <ios>
 #include <limits>
@@ -10,26 +9,28 @@
 #include <string>
 #include <vector>
 
+#include "NavDB.h"
+
 namespace OFP {
 struct Node {
   std::string id;
   double f_score;
-  bool operator>(const Node &other) const { return f_score > other.f_score; }
+  bool operator>(const Node& other) const { return f_score > other.f_score; }
 };
 
 class RouteFinder {
-public:
-  const NavDB &db;
-  RouteFinder(const NavDB &database) : db(database) {}
+ public:
+  const NavDB& db;
+  RouteFinder(const NavDB& database) : db(database) {}
 
-  double heuristic(const std::string &currID, const std::string &goalID){
+  double heuristic(const std::string& currID, const std::string& goalID) {
     Coordinate p1 = db.getCoordinate(currID);
     Coordinate p2 = db.getCoordinate(goalID);
     return calculateDistance(p1, p2);
   }
 
-  std::vector<std::string> findPath(const std::string &startID,
-                                    const std::string &endID) {
+  std::vector<std::string> findPath(const std::string& startID,
+                                    const std::string& endID) {
     std::map<std::string, double> g_score;
     std::map<std::string, std::string> parent;
     std::priority_queue<Node, std::vector<Node>, std::greater<Node>> pq;
@@ -49,16 +50,16 @@ public:
         break;
       }
 
-      const auto *neighbors = db.getNeighbors(u);
-      if(!neighbors) continue;
+      const auto* neighbors = db.getNeighbors(u);
+      if (!neighbors) continue;
 
-      for(const auto &segment : *neighbors){
+      for (const auto& segment : *neighbors) {
         std::string v = segment.toID;
         double weight = segment.distanceNM;
 
         double tentative_g = g_score[u] + weight;
 
-        if(g_score.find(v) == g_score.end() || tentative_g < g_score[v]){
+        if (g_score.find(v) == g_score.end() || tentative_g < g_score[v]) {
           g_score[v] = tentative_g;
           parent[v] = u;
 
@@ -66,27 +67,22 @@ public:
           pq.push({v, f});
         }
       }
-
-      std::vector<std::string> path;
-      if (parent.find(endID) == parent.end() && startID != endID) {
-                return path; // Path not found
-            }
-
-            std::string curr = endID;
-            while (curr != startID) {
-                path.push_back(curr);
-                curr = parent[curr];
-            }
-            path.push_back(startID);
-            std::reverse(path.begin(), path.end());
-
-            return path;
-        }
-
-      
+    }
+    std::vector<std::string> path;
+    if (parent.find(endID) == parent.end() && startID != endID) {
+      return path;  // Path not found
+    }
+    std::string curr = endID;
+    while (curr != startID) {
+      path.push_back(curr);
+      curr = parent[curr];
+    }
+    path.push_back(startID);
+    std::reverse(path.begin(), path.end());
+    return path;
   }
 };
 
-} // namespace OFP
+}  // namespace OFP
 
-#endif // !ROUTEFINDER_H
+#endif  // !ROUTEFINDER_H
