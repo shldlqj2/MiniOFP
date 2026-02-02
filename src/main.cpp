@@ -1,58 +1,31 @@
-#include "NavDB.h"
-#include "RouteFinder.h"
-#include <iomanip>
 #include <iostream>
+#include <string>
+
+#include "NavDB.h"
+#include "OFPEngine.h"
 
 int main() {
   using namespace OFP;
 
-  // 1. DB 로딩
+  // 1. 시스템 초기화
+  std::cout << "[System] Initializing Navigation Database..." << std::endl;
   NavDB db("../data/airports.csv", "../data/waypoints.csv",
            "../data/airways.csv");
+  OFPEngine engine(db);
 
-  // 2. 경로 탐색 엔진 생성
-  RouteFinder router(db);
+  // 2. 사용자 입력 시나리오
+  std::string callsign = "KAL027";
+  std::string dep = "RKSI";
+  std::string arr = "OLMEN";  // DB에 있는 목적지로 설정
+  double payload = 18000.0;   // 승객/화물 무게
+  double wind = -15.0;        // 맞바람 15노트
 
-  // 출발: 서울(RKSI), 도착: BIGOB (아까 CSV에서 정의한 끝점)
-  std::string start = "RKSI";
-  std::string end = "BIGOB";
+  // 3. OFP 생성
+  std::string ofpReport =
+      engine.generateFlightPlan(callsign, "B777", dep, arr, payload, wind);
 
-  std::cout << "=== Mini-OFP Dijkstra Search ===" << std::endl;
-  std::cout << "Searching path from " << start << " to " << end << "..."
-            << std::endl;
-
-  // 3. 길 찾기 수행
-  std::vector<std::string> path = router.findPath(start, end);
-
-  if (path.empty()) {
-    std::cout << "Path NOT found!" << std::endl;
-  } else {
-    std::cout << "Path Found! (" << path.size() << " points)" << std::endl;
-    std::cout << "------------------------------" << std::endl;
-
-    double totalDist = 0.0;
-    Coordinate prev = db.getCoordinate(path[0]);
-
-    for (size_t i = 0; i < path.size(); ++i) {
-      std::string id = path[i];
-      Coordinate curr = db.getCoordinate(id);
-
-      double legDist = 0;
-      if (i > 0) {
-        legDist = calculateDistance(prev, curr);
-        totalDist += legDist;
-      }
-
-      std::cout << " [" << i << "] " << id;
-      if (i > 0)
-        std::cout << " (+" << (int)legDist << " NM)";
-      std::cout << std::endl;
-
-      prev = curr;
-    }
-    std::cout << "------------------------------" << std::endl;
-    std::cout << "Total Distance: " << totalDist << " NM" << std::endl;
-  }
+  // 4. 결과 출력
+  std::cout << ofpReport << std::endl;
 
   return 0;
 }

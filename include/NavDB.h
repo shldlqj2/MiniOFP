@@ -166,6 +166,19 @@ public:
     }
     return nullptr;
   }
+
+  std::string findAirwayName(const std::string &fromID, const std::string &toID) const{
+    auto it = adjList.find(fromID);
+    if (it != adjList.end()) {
+      for(const auto &segment : it->second){
+        if(segment.toID == toID){
+          return segment.airwayName;
+        }
+      }
+
+    }
+    return "DCT";
+  }
 };
 } // namespace OFP
 #endif // !NAVDB_H
