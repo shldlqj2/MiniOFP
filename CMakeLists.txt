@@ -7,3 +7,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 include_directories(include)
 
 add_executable(MiniOFP src/main.cpp)
+
+add_executable(RunTests tests/test_main.cpp)
+
+target_include_directories(RunTests PRIVATE include)

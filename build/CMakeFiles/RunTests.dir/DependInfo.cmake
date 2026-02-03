@@ -8,8 +8,8 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
-  "/data/data/com.termux/files/home/MiniOFP/src/main.cpp" "CMakeFiles/MiniOFP.dir/src/main.cpp.o" "gcc" "CMakeFiles/MiniOFP.dir/src/main.cpp.o.d"
-  "" "MiniOFP" "gcc" "CMakeFiles/MiniOFP.dir/link.d"
+  "/data/data/com.termux/files/home/MiniOFP/tests/test_main.cpp" "CMakeFiles/RunTests.dir/tests/test_main.cpp.o" "gcc" "CMakeFiles/RunTests.dir/tests/test_main.cpp.o.d"
+  "" "RunTests" "gcc" "CMakeFiles/RunTests.dir/link.d"
   )
 
 # Targets to which this target links which contain Fortran sources.
