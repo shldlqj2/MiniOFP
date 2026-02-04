@@ -2,10 +2,14 @@
 #define AIRCRAFT_H
 
 #include <cmath>
+#include <fstream>
 #include <iostream>
+#include <map>
+#include <sstream>
 #include <string>
 #include <type_traits>
 #include <utility>
+#include <vector>
 
 namespace OFP {
 struct PerformanceData {
@@ -127,6 +131,48 @@ public:
   //   }
   //   return true;
   // }
+};
+class AircraftDB {
+  std::map<std::string, Aircraft> fleet;
+
+public:
+  AircraftDB(const std::string &filepath) { loadAircraft(filepath); }
+  void loadAircraft(const std::string &filepath) {
+    std::ifstream file(filepath);
+    if (!file.is_open())
+      return;
+
+    std::string line;
+  std:
+    std::getline(file, line);
+
+    while (std::getline(file, line)) {
+      std::stringstream ss(line);
+      std::string model, token;
+      std::vector<double> vals;
+
+      std::getline(ss, model, ',');
+      while (std::getline(ss, token, ',')) {
+        vals.push_back(std::stod(token));
+      }
+
+      if (vals.size() >= 9) {
+        Aircraft ac(model, vals[0], vals[1], vals[2]);
+        ac.setPerformance({vals[3], vals[4]}, {vals[5], vals[6]},
+                          {vals[7], vals[8]});
+        fleet.insert({model, ac});
+      }
+    }
+    std::cout << "[DB] Aircraft Loaded: " << fleet.size() << "types."
+              << std::endl;
+  }
+  const Aircraft *getAircraft(const std::string &modelName) const {
+    auto it = fleet.find(modelName);
+    if (it != fleet.end()) {
+      return &it->second;
+    }
+    return nullptr;
+  } // class AircraftDB
 };
 } // namespace OFP
 

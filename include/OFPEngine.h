@@ -1,5 +1,6 @@
 #ifndef OFPENGINE_H
 #define OFPENGINE_H
+#include <fstream>
 #include <iomanip>
 #include <sstream>
 #include <string>
@@ -11,11 +12,13 @@
 
 namespace OFP {
 class OFPEngine {
-  NavDB& db;
+  NavDB &db;
+  AircraftDB &acDb;
   RouteFinder routeFinder;
 
-  std::string formatRouteString(const std::vector<std::string>& path) {
-    if (path.size() < 2) return "";
+  std::string formatRouteString(const std::vector<std::string> &path) {
+    if (path.size() < 2)
+      return "";
     std::stringstream ss;
     ss << path[0];
     std::string currentAirway = "";
@@ -32,17 +35,22 @@ class OFPEngine {
     return ss.str();
   }
 
- public:
-  OFPEngine(NavDB& database) : db(database), routeFinder(database) {}
-  std::string generateFlightPlan(const std::string& callsign,
-                                 const std::string& aircraftType,
-                                 const std::string& depICAO,
-                                 const std::string& arrICAO, double payloadKg,
+public:
+  OFPEngine(NavDB &database, AircraftDB &aircraftDatabase)
+      : db(database), acDb(aircraftDatabase), routeFinder(database) {}
+  std::string generateFlightPlan(const std::string &callsign,
+                                 const std::string &aircraftType,
+                                 const std::string &depICAO,
+                                 const std::string &arrICAO, double payloadKg,
                                  double windComponent) {
     std::stringstream ss;
 
-    Aircraft aircraft("B777-300ER", 145500, 351500, 167800);
-    aircraft.setPerformance({380, 10500}, {490, 7500}, {320, 2500});
+    const Aircraft *aircraftPtr = acDb.getAircraft(aircraftType);
+    if (!aircraftPtr) {
+      return "ERROR: Unknown Aircraft Type " + aircraftType + "\n";
+    }
+
+    Aircraft aircraft = *aircraftPtr;
 
     ss << "Status: Searching Route from " << depICAO << "to" << arrICAO
        << "...\n";
@@ -103,6 +111,18 @@ class OFPEngine {
 
     return ss.str();
   }
+
+  void saveToFile(const std::string &filename, const std::string &content) {
+    std::ofstream out(filename);
+    if (out.is_open()) {
+      out << content;
+      out.close();
+      std::cout << "[System] OFP Saved to " << filename << std::endl;
+
+    } else {
+      std::cerr << "[Error] Could not write to file " << filename << std::endl;
+    }
+  }
 };
-}  // namespace OFP
+} // namespace OFP
 #endif
