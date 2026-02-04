@@ -1,0 +1,100 @@
+{
+	"kind" : "toolchains",
+	"toolchains" : 
+	[
+		{
+			"compiler" : 
+			{
+				"id" : "Clang",
+				"implicit" : 
+				{
+					"includeDirectories" : 
+					[
+						"/data/data/com.termux/files/usr/lib/clang/21/include",
+						"/data/data/com.termux/files/usr/include/aarch64-linux-android",
+						"/data/data/com.termux/files/usr/include"
+					],
+					"linkDirectories" : 
+					[
+						"/data/data/com.termux/files/usr/lib",
+						"/system/lib64"
+					],
+					"linkFrameworkDirectories" : [],
+					"linkLibraries" : 
+					[
+						"-l:libunwind.a",
+						"dl",
+						"c",
+						"-l:libunwind.a",
+						"dl"
+					]
+				},
+				"path" : "/data/data/com.termux/files/usr/bin/cc",
+				"version" : "21.1.8"
+			},
+			"language" : "C",
+			"sourceFileExtensions" : 
+			[
+				"c",
+				"m"
+			]
+		},
+		{
+			"compiler" : 
+			{
+				"id" : "Clang",
+				"implicit" : 
+				{
+					"includeDirectories" : 
+					[
+						"/data/data/com.termux/files/usr/include/c++/v1",
+						"/data/data/com.termux/files/usr/lib/clang/21/include",
+						"/data/data/com.termux/files/usr/include/aarch64-linux-android",
+						"/data/data/com.termux/files/usr/include"
+					],
+					"linkDirectories" : 
+					[
+						"/data/data/com.termux/files/usr/lib",
+						"/system/lib64"
+					],
+					"linkFrameworkDirectories" : [],
+					"linkLibraries" : 
+					[
+						"c++_shared",
+						"-l:libunwind.a",
+						"dl",
+						"m",
+						"c",
+						"-l:libunwind.a",
+						"dl"
+					]
+				},
+				"path" : "/data/data/com.termux/files/usr/bin/c++",
+				"version" : "21.1.8"
+			},
+			"language" : "CXX",
+			"sourceFileExtensions" : 
+			[
+				"C",
+				"M",
+				"c++",
+				"cc",
+				"cpp",
+				"cxx",
+				"mm",
+				"mpp",
+				"CPP",
+				"ixx",
+				"cppm",
+				"ccm",
+				"cxxm",
+				"c++m"
+			]
+		}
+	],
+	"version" : 
+	{
+		"major" : 1,
+		"minor" : 0
+	}
+}

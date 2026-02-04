@@ -85,6 +85,51 @@ rebuild_cache:
 rebuild_cache/fast: rebuild_cache
 .PHONY : rebuild_cache/fast
 
+# Special rule for the target list_install_components
+list_install_components:
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --cyan "Available install components are: \"gmock\" \"gtest\""
+.PHONY : list_install_components
+
+# Special rule for the target list_install_components
+list_install_components/fast: list_install_components
+.PHONY : list_install_components/fast
+
+# Special rule for the target install
+install: preinstall
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --cyan "Install the project..."
+	/data/data/com.termux/files/usr/bin/cmake -P cmake_install.cmake
+.PHONY : install
+
+# Special rule for the target install
+install/fast: preinstall/fast
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --cyan "Install the project..."
+	/data/data/com.termux/files/usr/bin/cmake -P cmake_install.cmake
+.PHONY : install/fast
+
+# Special rule for the target install/local
+install/local: preinstall
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --cyan "Installing only the local directory..."
+	/data/data/com.termux/files/usr/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
+.PHONY : install/local
+
+# Special rule for the target install/local
+install/local/fast: preinstall/fast
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --cyan "Installing only the local directory..."
+	/data/data/com.termux/files/usr/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
+.PHONY : install/local/fast
+
+# Special rule for the target install/strip
+install/strip: preinstall
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --cyan "Installing the project stripped..."
+	/data/data/com.termux/files/usr/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
+.PHONY : install/strip
+
+# Special rule for the target install/strip
+install/strip/fast: preinstall/fast
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --cyan "Installing the project stripped..."
+	/data/data/com.termux/files/usr/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
+.PHONY : install/strip/fast
+
 # The main all target
 all: cmake_check_build_system
 	$(CMAKE_COMMAND) -E cmake_progress_start /data/data/com.termux/files/home/MiniOFP/build/CMakeFiles /data/data/com.termux/files/home/MiniOFP/build//CMakeFiles/progress.marks
@@ -130,17 +175,69 @@ MiniOFP/fast:
 .PHONY : MiniOFP/fast
 
 #=============================================================================
-# Target rules for targets named RunTests
+# Target rules for targets named RunGTests
 
 # Build rule for target.
-RunTests: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 RunTests
-.PHONY : RunTests
+RunGTests: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 RunGTests
+.PHONY : RunGTests
 
 # fast build rule for target.
-RunTests/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/RunTests.dir/build.make CMakeFiles/RunTests.dir/build
-.PHONY : RunTests/fast
+RunGTests/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/RunGTests.dir/build.make CMakeFiles/RunGTests.dir/build
+.PHONY : RunGTests/fast
+
+#=============================================================================
+# Target rules for targets named gmock
+
+# Build rule for target.
+gmock: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 gmock
+.PHONY : gmock
+
+# fast build rule for target.
+gmock/fast:
+	$(MAKE) $(MAKESILENT) -f _deps/googletest-build/googlemock/CMakeFiles/gmock.dir/build.make _deps/googletest-build/googlemock/CMakeFiles/gmock.dir/build
+.PHONY : gmock/fast
+
+#=============================================================================
+# Target rules for targets named gmock_main
+
+# Build rule for target.
+gmock_main: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 gmock_main
+.PHONY : gmock_main
+
+# fast build rule for target.
+gmock_main/fast:
+	$(MAKE) $(MAKESILENT) -f _deps/googletest-build/googlemock/CMakeFiles/gmock_main.dir/build.make _deps/googletest-build/googlemock/CMakeFiles/gmock_main.dir/build
+.PHONY : gmock_main/fast
+
+#=============================================================================
+# Target rules for targets named gtest
+
+# Build rule for target.
+gtest: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 gtest
+.PHONY : gtest
+
+# fast build rule for target.
+gtest/fast:
+	$(MAKE) $(MAKESILENT) -f _deps/googletest-build/googletest/CMakeFiles/gtest.dir/build.make _deps/googletest-build/googletest/CMakeFiles/gtest.dir/build
+.PHONY : gtest/fast
+
+#=============================================================================
+# Target rules for targets named gtest_main
+
+# Build rule for target.
+gtest_main: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 gtest_main
+.PHONY : gtest_main
+
+# fast build rule for target.
+gtest_main/fast:
+	$(MAKE) $(MAKESILENT) -f _deps/googletest-build/googletest/CMakeFiles/gtest_main.dir/build.make _deps/googletest-build/googletest/CMakeFiles/gtest_main.dir/build
+.PHONY : gtest_main/fast
 
 src/main.o: src/main.cpp.o
 .PHONY : src/main.o
@@ -166,29 +263,29 @@ src/main.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/MiniOFP.dir/build.make CMakeFiles/MiniOFP.dir/src/main.cpp.s
 .PHONY : src/main.cpp.s
 
-tests/test_main.o: tests/test_main.cpp.o
-.PHONY : tests/test_main.o
+tests/test_main_gtest.o: tests/test_main_gtest.cpp.o
+.PHONY : tests/test_main_gtest.o
 
 # target to build an object file
-tests/test_main.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/RunTests.dir/build.make CMakeFiles/RunTests.dir/tests/test_main.cpp.o
-.PHONY : tests/test_main.cpp.o
+tests/test_main_gtest.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/RunGTests.dir/build.make CMakeFiles/RunGTests.dir/tests/test_main_gtest.cpp.o
+.PHONY : tests/test_main_gtest.cpp.o
 
-tests/test_main.i: tests/test_main.cpp.i
-.PHONY : tests/test_main.i
+tests/test_main_gtest.i: tests/test_main_gtest.cpp.i
+.PHONY : tests/test_main_gtest.i
 
 # target to preprocess a source file
-tests/test_main.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/RunTests.dir/build.make CMakeFiles/RunTests.dir/tests/test_main.cpp.i
-.PHONY : tests/test_main.cpp.i
+tests/test_main_gtest.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/RunGTests.dir/build.make CMakeFiles/RunGTests.dir/tests/test_main_gtest.cpp.i
+.PHONY : tests/test_main_gtest.cpp.i
 
-tests/test_main.s: tests/test_main.cpp.s
-.PHONY : tests/test_main.s
+tests/test_main_gtest.s: tests/test_main_gtest.cpp.s
+.PHONY : tests/test_main_gtest.s
 
 # target to generate assembly for a file
-tests/test_main.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/RunTests.dir/build.make CMakeFiles/RunTests.dir/tests/test_main.cpp.s
-.PHONY : tests/test_main.cpp.s
+tests/test_main_gtest.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/RunGTests.dir/build.make CMakeFiles/RunGTests.dir/tests/test_main_gtest.cpp.s
+.PHONY : tests/test_main_gtest.cpp.s
 
 # Help Target
 help:
@@ -197,15 +294,23 @@ help:
 	@echo "... clean"
 	@echo "... depend"
 	@echo "... edit_cache"
+	@echo "... install"
+	@echo "... install/local"
+	@echo "... install/strip"
+	@echo "... list_install_components"
 	@echo "... rebuild_cache"
 	@echo "... MiniOFP"
-	@echo "... RunTests"
+	@echo "... RunGTests"
+	@echo "... gmock"
+	@echo "... gmock_main"
+	@echo "... gtest"
+	@echo "... gtest_main"
 	@echo "... src/main.o"
 	@echo "... src/main.i"
 	@echo "... src/main.s"
-	@echo "... tests/test_main.o"
-	@echo "... tests/test_main.i"
-	@echo "... tests/test_main.s"
+	@echo "... tests/test_main_gtest.o"
+	@echo "... tests/test_main_gtest.i"
+	@echo "... tests/test_main_gtest.s"
 .PHONY : help
 
 
